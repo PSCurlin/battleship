@@ -1,4 +1,4 @@
-#include "b.h"
+#include "battleship.h"
 
 int main()
 {
