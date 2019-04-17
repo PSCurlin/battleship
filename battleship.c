@@ -15,13 +15,23 @@ struct _board{
   int submarine;
 };
 
+//Associates the words for certain colors with their ASCII equivalent
+#define RED   "\x1B[31m"
+#define GRN   "\x1B[92m"
+#define BLU   "\x1B[94m"
+#define MAG   "\x1B[35m"
+#define CYN   "\x1B[36m"
+#define YEL   "\x1B[93m"
+#define BOLD  "\x1B[1m"
+#define RSTCOL "\x1B[0m"
+
 typedef struct  _board board;
 
-//User input
+//If an user enters an invalid input a usage message appears
 void printUsage(){
-  printf("Error! Invalid input. You must input in the following format:\n");
-  printf("Size of board: integer between 5 and 20\n");
-  printf("Max Shots: Integer between 12 and n^2 - 1 (where n is the size of the board)\n");
+  printf(YEL BOLD "Error!" RSTCOL " Invalid input. You must input in the following format:\n");
+  printf(YEL"Size of board"RSTCOL": integer between 5 and 20\n");
+  printf(YEL"Max Shots:"RSTCOL" Integer between 12 and n^2 - 1 (where n is the size of the board)\n");
 }
 
  board * createBoard(int size) {
@@ -89,34 +99,36 @@ void revealBoard(board*b){
   printf("\n\n");
 }
 
+// Parses the arguments inputted by the user,where argc, is the argument count, argv, the argument vector, size, the size of the board, and maxshots, the maximum number of shots
 int parseArgs(int argc, char ** argv,int *size, int *maxshots)
 {
   int num;
   *size = 8;
-   //checks for invalid inputs
+   //Checks for invalid inputs
   if(argc < 2 || argc > 3){
 	printUsage();
 	return -1;
       }
   if(argc == 2){
+    // Checks if the maximum number of shots inputted is in range depending on the board size
     num = sscanf(argv[1],"%d",maxshots);
     if(num != 1 || *maxshots<12||*maxshots>(8*8)-1){
       printUsage();
       return -1;
     }
+  // Checks if the size of the board inputted is within the possible range
   if(*size>20||*size<5){
     printUsage();
     return -1;
   }
+  // Checks if the number inputted is valid for the maximum number of shots
   if(*size>((*maxshots)*(*maxshots)-1||*size<12)){
-      printUsage();
-      return -1;
+    printUsage();
+    return -1;
     }
   }
   return 0;
 }
-
-
 
  void deleteBoard(board*b)
  {
