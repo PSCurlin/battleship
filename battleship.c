@@ -1,12 +1,5 @@
 #include "battleship.h"
 
-int main()
-{
-  mainscrn();
-  while (getInput() && parseArgs());
-  return 0;
-}
-	
 
 struct _board{
   int size;
@@ -21,6 +14,12 @@ struct _board{
 };
 
 //User input
+int main()
+{
+  mainscrn();
+  while (getInput() && parseArgs());
+  return 0;
+}
 static int getInput()
 {
   printf(GRN "\n>>> "RSTCOL);
@@ -64,7 +63,7 @@ void mainscrn(){
 
 void printUsage() {
   printf("Usage: Number of shots: \n Input a number between 12 and 63.\n");
-
+}
 //Declares the usage for inputting the number of shots
 void usage1() {
   printf(YEL BOLD "Usage "RSTCOL YEL ": input an integer between 12 and 63 for the number of shots"RSTCOL);
@@ -110,6 +109,46 @@ void delay(int seconds) {
   while (clock() < strt_tm +ms);
 }
 
+int get(board * b, int row, int col) {
+  return b->data[(col-1) * b->rows + row - 1];
+}
+
+void set(board * b, int row, int col, double val) {
+  b->data[(col-1) * b->rows + row - 1] = val;
+}
+
+ board * createBoard(int size) {
+   int i; board * b;
+   if(size <= 0) return NULL;
+   b = (board *) malloc(sizeof(board));
+   if(!b) return NULL;
+   b->size = size;
+   b->data = (int*) malloc(size*size*sizeof(int));
+   b->tracker = (int*)malloc(size*size*sizeof(int));
+   if(!b->data) {
+     free(b);
+     return NULL;
+   }
+   if(!b->tracker) {
+     free(b);
+     return NULL;
+   }
+   for(i = 0; i < size*size; i++){
+     b->data[i] = 0;
+     b->tracker[i] = 0;
+   }
+   return b;
+ }
+
+ void deleteBoard(board*b)
+ {
+   if(b) {
+     free(b->data);
+     free(b->tracker);
+     free(b);
+   }
+ }
+ 
  static void arrangeCarrier(board *b){
    
   int dir,randrow,randcol;
@@ -382,11 +421,16 @@ static void arrangeSubmarine(board *b){
   }
 }
 
-_board * randomFleetArrangement (_board * blank_board){
+ board * randomFleetArrangement (board * b){
 
-  arrangeCarrier(blank_board);
-  arrangeBattleship(blank_board);
-  arrangeCruiser(blank_board);
-  arrangeSubmarine(blank_board);
-  
+  arrangeCarrier(b);
+  arrangeBattleship(b);
+  arrangeCruiser(b);
+  arrangeSubmarine(b);
+
+  b->unhit = 12;
+  b->carrier = 4;
+  b->battleship = 3;
+  b->cruiser = 3;
+  b->submarine = 2;
 }

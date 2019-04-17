@@ -35,11 +35,18 @@ void help();
 void instructions();
 void restart();
 
-typedef struct _board;
 int parseArgs(int argc, char **argv,int* board_size,int *max_shots);
+
+//Board creation
+typedef struct _board board;
+board *  createBoard(int size);
+void printBoard(board*b);
+int getTracker(board*b, int i, int j);
+void revealBoard(board *b);
 static void arrangeCarrier(board*b);
 static void arrangeBattleship(board *b);
 static void arrangeCruiser(board *b);
 static void arrangeSubmarine(board *b);
+
 
 
