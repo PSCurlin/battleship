@@ -10,10 +10,8 @@
 
 //Prints the usage if the user inputs something invalid
 void printUsage();
-
 //Creates a delay if needed in seconds
 void delay(int seconds);
-
 // Parses the arguments inputted by the user
 int parseArgs(int argc, char ** argv, int*size, int*maxshots);
 

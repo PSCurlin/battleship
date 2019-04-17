@@ -3,7 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-//Colors
+//Associates the word for each color with its approprate ASCII color equivalent
 #define RED   "\x1B[31m"
 #define GRN   "\x1B[92m"
 #define BLU   "\x1B[94m"
@@ -27,11 +27,11 @@ struct _board{
 
 typedef struct  _board board;
 
-//User input
+//Prints a usage if a user enters an invalid input a usage message appears
 void printUsage(){
   printf(YEL BOLD "Error!"RSTCOL" Invalid input. You must input in the following format:\n");
-  printf("Size of board: integer between 5 and 20\n");
-  printf("Max Shots: Integer between 12 and n^2 - 1 (where n is the size of the board)\n");
+  printf(YEL"Size of board:"RSTCOL" integer between 5 and 20\n");
+  printf(YEL"Max Shots:"RSTCOL" Integer between 12 and n^2 - 1 (where n is the size of the board)\n");
 }
 
  board * createBoard(int size) {
@@ -99,31 +99,41 @@ void revealBoard(board*b){
   printf("\n\n");
 }
 
+// Parses the arguments put into the input by the user
+// argc is the argument counter, argv the argument vector
+// size the size of the board and maxshots the maximum number of shots (both of which are stored for setting up the game)
 int parseArgs(int argc, char ** argv,int *size, int *maxshots)
 {
-   //checks for invalid inputs
-  if(argc < 2 || argc > 3){
+   //Checks if there are too few inputs or too many, prints the usage if this is the case
+  if (argc < 2 || argc > 3){
 	printUsage();
 	return -1;
       }
-  else if(argc == 2){
+  // Case for when there are two arguments
+  else if (argc == 2){
+    // Checks if the input is malformed, or if the maxshots is out of bounds from the range of number of shots defined by the size of the board
+    // If it is, it prints the usage
     if(sscanf(argv[1],"%d",maxshots) != 1 || *maxshots<12||*maxshots>((*size)*(*size))-1){
       printUsage();
       return -1;
     }
   }
+  // Case for when there are three arguments
   else if(argc == 3){
-    
-    if( sscanf(argv[2],"%d",maxshots) != 1 || *maxshots<12||*maxshots>((*size)*(*size)-1)){
+    // Checks if the input is malformed, or if the maxshots is out of bounds from the range of number of shots defined by the size of the board
+    // If it is, it prints the usage
+    if ( sscanf(argv[2],"%d",maxshots) != 1 || *maxshots<12||*maxshots>((*size)*(*size)-1)){
       printUsage();
       return -1;
     }
-    if(sscanf(argv[1],"%d",size) != 1 || *size<5 || *size > 20)
-      {
-	printUsage();
-	return -1;
+    // Checks if the input is malformed, or if the szie is out of bounds from the predefined board size range (5 to 20)
+    // If it is, it prints the usage
+    if(sscanf(argv[1],"%d",size) != 1 || *size<5 || *size > 20) {
+	    printUsage();
+	    return -1;
       }
   }
+  //Returns 0 when successfull
   return 0;
 }
 
