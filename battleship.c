@@ -70,7 +70,7 @@ void set(board * b, int row, int col, double val) {
 
 void printBoard(board*b) {
   int i, j = 0;
-  for(i = 1; i<b->size; i++)
+  for(i = 1; i<=b->size; i++)
     {
       printf("\n");
       for(j=1;j<=b->size;j++){
@@ -114,7 +114,7 @@ int parseArgs(int argc, char ** argv,int *size, int *maxshots)
   }
   else if(argc == 3){
     
-    if( sscanf(argv[2],"%d",maxshots) != 1 || *maxshots<12||*maxshots>((*size)*(*size))-1){
+    if( sscanf(argv[2],"%d",maxshots) != 1 || *maxshots<12||*maxshots>((*size)*(*size)-1)){
       printUsage();
       return -1;
     }
