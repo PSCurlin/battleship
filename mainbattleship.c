@@ -12,6 +12,8 @@ int main(int argc, char **argv){
   //Check that users input is valid
   if(err == -1) printUsage();
 
+  else{
+    
   //Create new Board
   board *b;
   b = createBoard(size);
@@ -21,4 +23,5 @@ int main(int argc, char **argv){
 
   printBoard(b);
   revealBoard(b);
+  }
 }

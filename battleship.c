@@ -3,6 +3,16 @@
 #include <math.h>
 #include <stdlib.h>
 
+//Colors
+#define RED   "\x1B[31m"
+#define GRN   "\x1B[92m"
+#define BLU   "\x1B[94m"
+#define MAG   "\x1B[35m"
+#define CYN   "\x1B[36m"
+#define YEL   "\x1B[93m"
+#define BOLD  "\x1B[1m"
+#define RSTCOL "\x1B[0m"
+
 struct _board{
   int size;
   int *data;
@@ -19,7 +29,7 @@ typedef struct  _board board;
 
 //User input
 void printUsage(){
-  printf("Error! Invalid input. You must input in the following format:\n");
+  printf(YEL BOLD "Error!"RSTCOL" Invalid input. You must input in the following format:\n");
   printf("Size of board: integer between 5 and 20\n");
   printf("Max Shots: Integer between 12 and n^2 - 1 (where n is the size of the board)\n");
 }
@@ -91,27 +101,28 @@ void revealBoard(board*b){
 
 int parseArgs(int argc, char ** argv,int *size, int *maxshots)
 {
-  int num;
-  *size = 8;
    //checks for invalid inputs
   if(argc < 2 || argc > 3){
 	printUsage();
 	return -1;
       }
-  if(argc == 2){
-    num = sscanf(argv[1],"%d",maxshots);
-    if(num != 1 || *maxshots<12||*maxshots>(8*8)-1){
+  else if(argc == 2){
+    if(sscanf(argv[1],"%d",maxshots) != 1 || *maxshots<12||*maxshots>((*size)*(*size))-1){
       printUsage();
       return -1;
     }
-  if(*size>20||*size<5){
-    printUsage();
-    return -1;
   }
-  if(*size>((*maxshots)*(*maxshots)-1||*size<12)){
+  else if(argc == 3){
+    
+    if( sscanf(argv[2],"%d",maxshots) != 1 || *maxshots<12||*maxshots>((*size)*(*size))-1){
       printUsage();
       return -1;
     }
+    if(sscanf(argv[1],"%d",size) != 1 || *size<5 || *size > 20)
+      {
+	printUsage();
+	return -1;
+      }
   }
   return 0;
 }
