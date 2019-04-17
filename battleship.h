@@ -43,6 +43,8 @@ board *  createBoard(int size);
 void printBoard(board*b);
 int getTracker(board*b, int i, int j);
 void revealBoard(board *b);
+int get(board*b, int row, int col);
+void set(board*b, int row, int col, double val);
 static void arrangeCarrier(board*b);
 static void arrangeBattleship(board *b);
 static void arrangeCruiser(board *b);

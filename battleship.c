@@ -60,7 +60,6 @@ void mainscrn(){
 
 }
 
-
 void printUsage() {
   printf("Usage: Number of shots: \n Input a number between 12 and 63.\n");
 }
@@ -110,11 +109,11 @@ void delay(int seconds) {
 }
 
 int get(board * b, int row, int col) {
-  return b->data[(col-1) * b->rows + row - 1];
+  return b->data[(col-1) * b->size + row - 1];
 }
 
 void set(board * b, int row, int col, double val) {
-  b->data[(col-1) * b->rows + row - 1] = val;
+  b->data[(col-1) * b->size + row - 1] = val;
 }
 
  board * createBoard(int size) {
@@ -148,6 +147,10 @@ void set(board * b, int row, int col, double val) {
      free(b);
    }
  }
+
+int getTracker(board*b, int i, int j) {
+   return b->tracker[(j-1) * b->size + i - 1];
+}
  
  static void arrangeCarrier(board *b){
    
@@ -433,4 +436,22 @@ static void arrangeSubmarine(board *b){
   b->battleship = 3;
   b->cruiser = 3;
   b->submarine = 2;
+}
+
+void printBoard(board*b) {
+  int i, j;
+  for(i = 1; i<b->size; i++)
+    {
+      printf("\n");
+      if(getTracker(b, i, j) == 0){
+	printf(".  ");
+      }
+      else if(getTracker(b,i,j)==1){
+	printf("O  ");
+      }
+      else if(getTracker(b,i,j)==-1){
+	printf("X  ");
+      }
+    }
+  printf("\n\n");
 }
