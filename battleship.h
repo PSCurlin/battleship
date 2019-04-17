@@ -1,16 +1,14 @@
+#ifndef BATTLESHIP_H_
+#define BATTLESHIP_H_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
 #include <time.h>
 
-//Main screen functions
-void mainscrn();
-void usage1();
-
 //Commands
-void instructions();
-void help();
+void printUsage();
 
 //Time
 void delay(int seconds);
@@ -25,30 +23,21 @@ void delay(int seconds);
 #define BOLD  "\x1B[1m"
 #define RSTCOL "\x1B[0m"
 
-
-static char input[100];
-static int getInput();
-static int parseArgs();
-
-void printUsage();
-void help();
-void instructions();
-void restart();
-
-int parseArgs(int argc, char **argv,int* board_size,int *max_shots);
+int parseArgs(int argc, char ** argv, int*size, int*maxshots);
 
 //Board creation
 typedef struct _board board;
 board *  createBoard(int size);
+void deleteBoard();
 void printBoard(board*b);
 int getTracker(board*b, int i, int j);
 void revealBoard(board *b);
 int get(board*b, int row, int col);
 void set(board*b, int row, int col, double val);
-static void arrangeCarrier(board*b);
-static void arrangeBattleship(board *b);
-static void arrangeCruiser(board *b);
-static void arrangeSubmarine(board *b);
+void arrangeCarrier(board*b);
+void arrangeBattleship(board *b);
+void arrangeCruiser(board *b);
+void arrangeSubmarine(board *b);
 
-
+#endif
 

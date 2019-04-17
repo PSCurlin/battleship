@@ -1,5 +1,7 @@
-#include "battleship.h"
-
+#include <stdio.h>
+#include <assert.h>
+#include <math.h>
+#include <stdlib.h>
 
 struct _board{
   int size;
@@ -13,107 +15,13 @@ struct _board{
   int submarine;
 };
 
+typedef struct  _board board;
+
 //User input
-int main()
-{
-  mainscrn();
-  while (getInput() && parseArgs());
-  return 0;
-}
-static int getInput()
-{
-  printf(GRN "\n>>> "RSTCOL);
-  return fgets(input,  sizeof(input),stdin) !=NULL;
-}
-
-//Parser
-static int parseArgs()
-{
-  char *cmd = strtok(input, " \n");
-  int i = atoi(cmd);
-  if (cmd != NULL)
-    {
-      if (strcmp(cmd, "-h") == 0) {
-	help();
-      }
-       if (strcmp(cmd, "-i") == 0) {
-	  instructions();
-	}
-      else if (strcmp(cmd, "-x") == 0) {
-      	  printf(BOLD"\nBYE!\n"RSTCOL);
-	  exit(0);
-        }
-      // else if - put the function to see if the numbers are between the values that we need
-      else {
-	usage1();
-      }
-    }
-   return 1;
-}
-
-//Prints the main screen of the game
-void mainscrn(){
-  printf(RED "\n~~~~~~~~~~~~~~~~~~~~~~\n"RSTCOL);
-  printf("WELCOME TO BATTLESHIP!\n");
-  printf(RED "~~~~~~~~~~~~~~~~~~~~~~\n"RSTCOL);
-  printf("\nType in the number of shots that you wish to have (-h for list of commands):\n");
-
-}
-
-void printUsage() {
-  printf("Usage: Number of shots: \n Input a number between 12 and 63.\n");
-}
-//Declares the usage for inputting the number of shots
-void usage1() {
-  printf(YEL BOLD "Usage "RSTCOL YEL ": input an integer between 12 and 63 for the number of shots"RSTCOL);
-}
-
-//Lists the instructions of the game
-void instructions() {
-  printf(RED"\n~~~~~~~~~~~~~~~~~~~~~\n"RSTCOL);
-  printf("HOW TO PLAY BATTLESHIP\n");
-  printf(RED "~~~~~~~~~~~~~~~~~~~~~~\n"RSTCOL);
-  
-  printf("\nThis is a single-player version of the game.\n");
-  printf("You must figure out the location of the computer's fleet\n");
-  printf("\nShips will only  be arranged horizontally or vertically.\n");
-  printf("The ships will not overlap each other and are fully \nwithin the board.\n");
-  
-  printf("\nWhen the ships are arranged, you will fire shots at the \n");
-  printf("computer's board by announcing the cell number you wish to hit.\n");
-  
-  printf("\nIf you hit the computer's ship it will announce "RED"HIT"RSTCOL " else it will \ndeclare a "BLU"MISS.\n "RSTCOL);
-  
-  printf("\nOnce an entire ship is sunk the computer will declare"BOLD" YOU SUNK MY"YEL " [ship type]"RSTCOL "!\n");
-  
-  printf("\nIf you sink all of the ships under the given number of available shots,\n");
-  printf("you win the game!\n");
-}
-
-//Lists the user commands
-void help() {
-  printf(RED "\n~~~~~~~~~~~~~~~~"RSTCOL);
-  printf("\nLIST OF COMMANDS");
-  printf(RED"\n~~~~~~~~~~~~~~~~\n"RSTCOL);
-  printf(YEL BOLD" -i " RSTCOL "   instructions on the game\n");
-  printf(YEL BOLD" -h " RSTCOL "   list of commands\n");
-  printf(YEL BOLD" -x " RSTCOL "   exits the game\n");
-  printf(YEL BOLD" -r " RSTCOL "   restarts the game\n");
-}
-
-//Creates a delay in seconds
-void delay(int seconds) {
-  int ms = 1000 * seconds;
-  clock_t strt_tm = clock();
-  while (clock() < strt_tm +ms);
-}
-
-int get(board * b, int row, int col) {
-  return b->data[(col-1) * b->size + row - 1];
-}
-
-void set(board * b, int row, int col, double val) {
-  b->data[(col-1) * b->size + row - 1] = val;
+void printUsage(){
+  printf("Error! Invalid input. You must input in the following format:\n");
+  printf("Size of board: integer between 5 and 20\n");
+  printf("Max Shots: Integer between 12 and n^2 - 1 (where n is the size of the board)\n");
 }
 
  board * createBoard(int size) {
@@ -139,6 +47,77 @@ void set(board * b, int row, int col, double val) {
    return b;
  }
 
+int getTracker(board*b, int i, int j) {
+   return b->tracker[(j-1) * b->size + i];
+}
+ 
+int get(board *b, int row, int col){
+  return b->data[(col-1)*b->size+row];
+}
+void set(board * b, int row, int col, double val) {
+  b->data[(col-1) * b->size + row] = val;
+}
+
+void printBoard(board*b) {
+  int i, j = 0;
+  for(i = 1; i<b->size; i++)
+    {
+      printf("\n");
+      for(j=1;j<=b->size;j++){
+      if(getTracker(b, i, j) == 0){
+	printf(".  ");
+      }
+      else if(getTracker(b,i,j)==1){
+	printf("O  ");
+      }
+      else if(getTracker(b,i,j)==-1){
+	printf("X  ");
+      }
+      }
+    }
+  printf("\n\n");
+}
+
+void revealBoard(board*b){
+  int i, j;
+  for(i = 1; i <= b->size; i++){
+    printf("\n");
+    for(j=1;j<=b->size;j++){
+      printf("%d ", get(b,i,j));
+    }
+  }
+  printf("\n\n");
+}
+
+int parseArgs(int argc, char ** argv,int *size, int *maxshots)
+{
+  int num;
+  *size = 8;
+   //checks for invalid inputs
+  if(argc < 2 || argc > 3){
+	printUsage();
+	return -1;
+      }
+  if(argc == 2){
+    num = sscanf(argv[1],"%d",maxshots);
+    if(num != 1 || *maxshots<12||*maxshots>(8*8)-1){
+      printUsage();
+      return -1;
+    }
+  if(*size>20||*size<5){
+    printUsage();
+    return -1;
+  }
+  if(*size>((*maxshots)*(*maxshots)-1||*size<12)){
+      printUsage();
+      return -1;
+    }
+  }
+  return 0;
+}
+
+
+
  void deleteBoard(board*b)
  {
    if(b) {
@@ -148,11 +127,7 @@ void set(board * b, int row, int col, double val) {
    }
  }
 
-int getTracker(board*b, int i, int j) {
-   return b->tracker[(j-1) * b->size + i - 1];
-}
- 
- static void arrangeCarrier(board *b){
+void arrangeCarrier(board *b){
    
   int dir,randrow,randcol;
 
@@ -168,7 +143,7 @@ int getTracker(board*b, int i, int j) {
     //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow-1,randcol) !=0 || get(b,randrow-2,randcol) !=0 || get(b,randrow-3,randcol) !=0 ) continue;
 
-    //finally set the cells to 1 (since we are arranging a carrier.)
+    //finally set the cells to 4 (since we are arranging a carrier.)
     set(b,randrow,randcol,1);
     set(b,randrow-1,randcol,1);
     set(b,randrow-2,randcol,1);
@@ -225,7 +200,7 @@ int getTracker(board*b, int i, int j) {
   }
 }
 
-static void arrangeBattleship(board *b){
+void arrangeBattleship(board *b){
    int dir,randrow,randcol;
 
   while(1){
@@ -293,7 +268,7 @@ static void arrangeBattleship(board *b){
   }
 }
 
-static void arrangeCruiser(board *b){
+void arrangeCruiser(board *b){
    int dir,randrow,randcol;
 
   while(1){
@@ -361,7 +336,7 @@ static void arrangeCruiser(board *b){
   }
 }
 
-static void arrangeSubmarine(board *b){
+void arrangeSubmarine(board *b){
    int dir,randrow,randcol;
 
   while(1){
@@ -423,7 +398,6 @@ static void arrangeSubmarine(board *b){
   
   }
 }
-
  board * randomFleetArrangement (board * b){
 
   arrangeCarrier(b);
@@ -436,22 +410,9 @@ static void arrangeSubmarine(board *b){
   b->battleship = 3;
   b->cruiser = 3;
   b->submarine = 2;
+
+  return b;
 }
 
-void printBoard(board*b) {
-  int i, j;
-  for(i = 1; i<b->size; i++)
-    {
-      printf("\n");
-      if(getTracker(b, i, j) == 0){
-	printf(".  ");
-      }
-      else if(getTracker(b,i,j)==1){
-	printf("O  ");
-      }
-      else if(getTracker(b,i,j)==-1){
-	printf("X  ");
-      }
-    }
-  printf("\n\n");
-}
+
+
