@@ -1,13 +1,6 @@
 #ifndef BATTLESHIP_H_
 #define BATTLESHIP_H_
 
-//Includes the required libraries for the c file
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <string.h>
-#include <time.h>
-
 //Prints the usage if the user inputs something invalid
 void printUsage();
 //Creates a delay if needed in seconds
@@ -33,5 +26,6 @@ void arrangeCruiser(board *b);
 //Aranges the submarines
 void arrangeSubmarine(board *b);
 
+int readTargets(board*b, int * row, int * col);
 #endif
 

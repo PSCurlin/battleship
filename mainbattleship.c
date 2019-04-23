@@ -2,10 +2,10 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include <time.h>
 
 int main(int argc, char **argv){
-  
+  srand(time(0));
   int size=8, maxshots, err;
   err = parseArgs(argc,argv,&size,&maxshots);
 
@@ -23,5 +23,8 @@ int main(int argc, char **argv){
 
   printBoard(b);
   revealBoard(b);
+  int * row;
+  int * col;
+  readTargets(b,row, col);
   }
 }

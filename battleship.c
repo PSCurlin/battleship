@@ -3,6 +3,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "battleship.h"
+
 //Associates the word for each color with its approprate ASCII color equivalent
 #define RED   "\x1B[31m"
 #define GRN   "\x1B[92m"
@@ -25,7 +27,7 @@ struct _board{
   int submarine;
 };
 
-typedef struct  _board board;
+
 
 //Prints a usage if a user enters an invalid input a usage message appears
 void printUsage(){
@@ -435,4 +437,21 @@ void arrangeSubmarine(board *b){
   return b;
 }
 
+
+int readTargets(board * b, int * targetRow, int * targetCol){
+  char cell[3];
+  int row;
+  char col;
+  int ret;
+  int size = b->size;
+
+  while(1){
+    fgets(cell,3,stdin);
+
+    if(sscanf("%d",&targetRow) != 1) {
+      printf(YEL BOLD "Error! You must input the number of rows followed by the letter column.); 
+    }
+  }
+
+}
 
