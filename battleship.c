@@ -27,8 +27,6 @@ struct _board{
   int submarine;
 };
 
-
-
 //Prints a usage if a user enters an invalid input a usage message appears
 void printUsage(){
   printf(YEL BOLD "Error!"RSTCOL" Invalid input. You must input in the following format:\n");

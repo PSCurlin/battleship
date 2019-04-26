@@ -11,11 +11,17 @@ int parseArgs(int argc, char ** argv, int*size, int*maxshots);
 //Functions used to generate the board
 typedef struct _board board;
 board *  createBoard(int size);
+//Deletes the board
 void deleteBoard();
+//Prints the board
 void printBoard(board*b);
+//Tracks the board
 int getTracker(board*b, int i, int j);
+//Reveals the board
 void revealBoard(board *b);
+//Gets element from the board
 int get(board*b, int row, int col);
+//Sets element from the board
 void set(board*b, int row, int col, double val);
 //Aranges the carrier
 void arrangeCarrier(board*b);
@@ -25,7 +31,7 @@ void arrangeBattleship(board *b);
 void arrangeCruiser(board *b);
 //Aranges the submarines
 void arrangeSubmarine(board *b);
-
+//Reads the inputted target by the user
 int readTargets(board*b, int * row, int * col);
 #endif
 
