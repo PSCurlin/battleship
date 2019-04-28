@@ -40,9 +40,5 @@ void readTargets(board*b, int * row, int * col);
 //Main function that counts if your shots and declares your win or loss
 void play(board *b, int maxshots);
 
-<<<<<<< HEAD
-int readTargets(board*b, int * row, char * col);
-=======
->>>>>>> 477c8a82555bddcde513f26f3667a1b0dc1ed38e
 #endif
 

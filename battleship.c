@@ -3,10 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-<<<<<<< HEAD
 
-=======
->>>>>>> 477c8a82555bddcde513f26f3667a1b0dc1ed38e
 #include "battleship.h"
 
 //Associates the word for each color with its approprate ASCII color equivalent
@@ -15,7 +12,7 @@
 #define YEL   "\x1B[93m"
 #define BOLD  "\x1B[1m"
 #define RSTCOL "\x1B[0m"
-
+#define GRN "\x1B[0;32m"
 struct _board{
   int size;
   int *data;
@@ -79,26 +76,24 @@ void set(board * b, int row, int col, double val) {
 }
 
 void printBoard(board*b) {
-  int i, j = 0;
+  int i = 0, j = 0;
+  char c;
+  for(c = 'a'; c < 'a'+b->size; ++c){
+    printf(GRN "%c  ", c);
+    }
+ 
   for(i = 1; i<=b->size; i++)
     {
       printf("\n");
       for(j=1;j<=b->size;j++){
       if(getTracker(b, i, j) == 0){
-	printf(".  ");
+	 printf(RSTCOL ".  ");
       }
       else if(getTracker(b,i,j)==1){
-<<<<<<< HEAD
-	printf(BLU BOLD"O  ");
-      }
-      else if(getTracker(b,i,j)==-1){
 	printf(RED BOLD"X  ");
-=======
-	printf(BLU BOLD"O  "RSTCOL);
       }
       else if(getTracker(b,i,j)==-1){
-	printf(RED BOLD"X  "RSTCOL);
->>>>>>> 477c8a82555bddcde513f26f3667a1b0dc1ed38e
+	printf(BLU BOLD"O  ");
       }
       }
     }
@@ -333,13 +328,8 @@ void randomFleetArrangement (board * b){
  b->submarine = 2;
 }
 
-<<<<<<< HEAD
-int readTargets(board * b, int * targetRow, char * targetCol){
-  char cell[3];
-=======
 void readTargets(board * b, int * targetRow, int * targetCol){
   char cell[4];
->>>>>>> 477c8a82555bddcde513f26f3667a1b0dc1ed38e
   int row;
   char col;
   int ret;
@@ -347,19 +337,6 @@ void readTargets(board * b, int * targetRow, int * targetCol){
   char *p;
 
   while(1){
-<<<<<<< HEAD
-    printf("Enter the cell number to hit:");
-    if(fgets(cell, sizeof(cell),stdin) {
-	ret = sscanf(cell,"%d%c",&row,&col);
-	if (ret !=2 || col < 97 || col > 122) {
-	  printf("Enter the cell as a number (row followed by a lowercase letter (col).\n\n");
-	  continue;
-	}
-	
-      printf(YEL BOLD "Error! You must input the number of rows followed by the letter column.");
-    }
-    
-=======
     printf("Enter target cell: ");
     if(fgets(cell,sizeof(cell),stdin) != NULL) {
 
@@ -395,17 +372,13 @@ void readTargets(board * b, int * targetRow, int * targetCol){
       printf(YEL BOLD "Error! "RSTCOL"You must input the number of rows followed by the letter column.\n"); 
       continue;
     }      
->>>>>>> 477c8a82555bddcde513f26f3667a1b0dc1ed38e
   }
 }
 
 void play(board *b, int maxshots) {
  int row, col;
  int remain = maxshots;
- int a1 = 0;
- int a2 = 0;
- int a3 = 0;
- int a4 = 0;
+ int a1 = 0,a2 = 0, a3 = 0,a4 = 0;
 
  while (b->unhit > 0 && remain > 0 && (remain >= b->unhit)) {
   printBoard(b);
@@ -416,7 +389,7 @@ void play(board *b, int maxshots) {
     setTracker(b,row,col,-1);
     remain--;
   }
-   if (get(b,row,col) == 1) {
+  if (get(b,row,col) == 1) {
     printf(BLU BOLD"\nHit!\n"RSTCOL);
     setTracker(b,row,col,1);
     b->carrier--;
