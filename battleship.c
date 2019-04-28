@@ -385,12 +385,12 @@ void play(board *b, int maxshots) {
   printf("\nYou have %d shots remaining\n",remain);
   readTargets(b,&row,&col);
   if (get(b,row,col) == 0) {
-    printf("Miss!\n");
+    printf(RED BOLD"Miss!\n"RSTCOL);
     setTracker(b,row,col,-1);
     remain--;
   }
    if (get(b,row,col) == 1) {
-    printf("Hit!\n");
+    printf(BLUE BOLD"Hit!\n"RSTCOL);
     setTracker(b,row,col,1);
     b->carrier--;
     b->unhit--;
