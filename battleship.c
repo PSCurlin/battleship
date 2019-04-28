@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 #include "battleship.h"
 
 //Associates the word for each color with its approprate ASCII color equivalent
@@ -31,12 +32,6 @@ void printUsage(){
   printf(YEL BOLD "Error!"RSTCOL" Invalid input. You must input in the following format:\n");
   printf(YEL"Size of board:"RSTCOL" integer between 5 and 20\n");
   printf(YEL"Max Shots:"RSTCOL" Integer between 12 and n^2 - 1 (where n is the size of the board)\n");
-}
-
-void mnscrn() {
-  printf(RED   "\n~~~~~~~~~~~~~~~~~~~~~"RSTCOL);
-  printf(WHITE BOLD "WELCOME TO BATTLESHIP\n"RSTCOL);
-  printf(RED   "\n~~~~~~~~~~~~~~~~~~~~~\n"RSTCOL);
 }
 
 board * createBoard(int size) {
@@ -436,16 +431,27 @@ void randomFleetArrangement (board * b){
 
 }
 
-int readTargets(board * b, int * targetRow, int * targetCol){
-  char cell[3];
+void readTargets(board * b, int * targetRow, int * targetCol){
+  char cell[4];
   int row;
   char col;
   int ret;
   int size = b->size;
+  char *p;
 
   while(1){
-    if(fgets(cell,3,stdin) != NULL) {
-      ret = sscanf("%d%c",&row,&col);
+    printf("Enter target cell: ");
+    if(fgets(cell,sizeof(cell),stdin) != NULL) {
+
+      if ((p=strchr(cell,'\n'))) {
+	  *p=0;
+	}
+	else {
+	scanf("%*[^\n]");
+	scanf("%*c");
+	}
+	
+      ret = sscanf(cell,"%d%c",&row,&col);
       if (ret != 2 || col<97 || col>122){
       printf(YEL BOLD "Error! "RSTCOL"You must input the number of rows followed by the letter column.\n"); 
       continue;
@@ -459,12 +465,13 @@ int readTargets(board * b, int * targetRow, int * targetCol){
       continue; 
       }
       
-      if (getTracker(b,row,col) != 0) {
+      if (getTracker(b,row,col-96) != 0) {
         printf("You already shot this target!\n");
         continue;
       }
       *targetRow = row;
       *targetCol = col - 96;
+      break;
     } 
     else {
       printf(YEL BOLD "Error! "RSTCOL"You must input the number of rows followed by the letter column.\n"); 
@@ -473,14 +480,21 @@ int readTargets(board * b, int * targetRow, int * targetCol){
   }
 }
 
-int play(board *b, int maxshots) {
+void play(board *b, int maxshots) {
  int row, col;
  int remain = maxshots;
- int a1 = 0,a2 = 0,a3 = 0,a4 = 0;
+ int a1 = 0;
+ int a2 = 0;
+ int a3 = 0;
+ int a4 = 0;
 
- readTargets(b,&row,&col);
+ while (b->unhit > 0 && remain > 0 && (remain >= b->unhit)) {
+
+  printBoard(b);
+  printf("You have %d shots remaining\n",remain);
+   
+  readTargets(b,&row,&col);
  
- while (b->unhit > 0 && remain > 0 && (remain >= b->unhit) {
   if (get(b,row,col) == 0) {
     printf("Miss!\n");
     setTracker(b,row,col,-1);
@@ -488,28 +502,28 @@ int play(board *b, int maxshots) {
   }
    if (get(b,row,col) == 1) {
     printf("Hit!\n");
-    setTracker(b,row,col,-1);
+    setTracker(b,row,col,1);
     b->carrier--;
     b->unhit--;
     remain--;
    }
   if (get(b,row,col) == 2) {
     printf("Hit!\n");
-    setTracker(b,row,col,-1);
+    setTracker(b,row,col,1);
     b->battleship--;
     b->unhit--;
     remain--;
   }
   if (get(b,row,col) == 3) {
     printf("Hit!\n");
-    setTracker(b,row,col,-1);
+    setTracker(b,row,col,1);
     b->cruiser--;
     b->unhit--;
     remain--;
   }
   if (get(b,row,col) == 4) {
    printf("Hit!\n");
-   setTracker(b,row,col,-1);
+   setTracker(b,row,col,1);
     b->submarine--;
     b->unhit--;
     remain--;
@@ -531,14 +545,15 @@ int play(board *b, int maxshots) {
     a4 = 1;
   }
  }
+ 
  if (remain == 0 && b->unhit > 0) {
    printf("YOU LOSE - GAME OVER - YOU RAN OUT OF SHOTS! \n"); 
  }
- if (remain < b->unhit) {
+ if (remain < b->unhit && b->unhit>0 && remain>0) {
    printf("YOU LOSE - GAME OVER - NOT ENOUGH SHOTS REMAINING! \n");
  }
  if (b->unhit == 0 && remain > 0) {
    printf("YOU WIN - GAME OVER - CONGRATULAIONS!\n");
- } 
+ }
 }
 

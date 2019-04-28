@@ -1,8 +1,6 @@
 #ifndef BATTLESHIP_H_
 #define BATTLESHIP_H_
 
-//Prints the mainscreen of the game
-void mnscrn();
 //Prints the usage if the user inputs something invalid
 void printUsage();
 //Main screen of the game
@@ -38,9 +36,9 @@ void arrangeCruiser(board *b);
 void arrangeSubmarine(board *b);
 //Reads the inputted target by the user
 void randomFleetArrangement (board * b);
-int readTargets(board*b, int * row, int * col);
+void readTargets(board*b, int * row, int * col);
 //Main function that counts if your shots and declares your win or loss
-int play(board *b, int maxshots);
+void play(board *b, int maxshots);
 
 #endif
 
