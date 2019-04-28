@@ -3,11 +3,12 @@
 
 //Prints the usage if the user inputs something invalid
 void printUsage();
+//Main screen of the game
+int mainscrn();
 //Creates a delay if needed in seconds
 void delay(int seconds);
 // Parses the arguments inputted by the user
 int parseArgs(int argc, char ** argv, int*size, int*maxshots);
-
 //Functions used to generate the board
 typedef struct _board board;
 board *  createBoard(int size);
@@ -15,7 +16,7 @@ board *  createBoard(int size);
 void deleteBoard();
 //Prints the board
 void printBoard(board*b);
-//Tracks the board
+//Tracks if the cell has been previously hit
 int getTracker(board*b, int i, int j);
 //Reveals the board
 void revealBoard(board *b);
@@ -33,5 +34,11 @@ void arrangeCruiser(board *b);
 void arrangeSubmarine(board *b);
 //Reads the inputted target by the user
 int readTargets(board*b, int * row, int * col);
+//Declares that you lost and quits the game
+int lose();
+//Declares that you won and quits the game
+int win();
+//Counts the number of hits until the max number of shots
+
 #endif
 

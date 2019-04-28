@@ -5,6 +5,7 @@
 #include <time.h>
 
 int main(int argc, char **argv){
+  mnscrn();
   srand(time(0));
   int size=8, maxshots, err;
   err = parseArgs(argc,argv,&size,&maxshots);
@@ -26,5 +27,6 @@ int main(int argc, char **argv){
   int * row;
   int * col;
   readTargets(b,row, col);
+  
   }
 }
