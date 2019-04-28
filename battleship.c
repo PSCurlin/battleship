@@ -34,8 +34,8 @@ void printUsage(){
 }
 
 void mainScreen(){
-  printf(RED"\n~~~~~~~~~~~~~~~~~~~~~\n");
-  printf(BOLD"WELCOME TO BATTLESHIP\n"RSTCOL);
+  printf(RED"\n~~~~~~~~~~~~~~~~~~~~~\n"RSTCOL);
+  printf(BOLD YEL "WELCOME TO BATTLESHIP"RSTCOL);
   printf(RED BOLD"\n~~~~~~~~~~~~~~~~~~~~~\n"RSTCOL);
 }
 board * createBoard(int size) {
