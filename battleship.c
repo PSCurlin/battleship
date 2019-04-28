@@ -382,7 +382,7 @@ void play(board *b, int maxshots) {
 
  while (b->unhit > 0 && remain > 0 && (remain >= b->unhit)) {
   printBoard(b);
-  printf("You have"BOLD" %d"RSTCOL" shots remaining\n",remain);
+  printf("You have %d shots remaining\n",remain);
   readTargets(b,&row,&col);
   if (get(b,row,col) == 0) {
     printf("Miss!\n");
