@@ -87,10 +87,10 @@ void printBoard(board*b) {
 	printf(".  ");
       }
       else if(getTracker(b,i,j)==1){
-	printf("O  ");
+	printf(BLU BOLD"O  "RSTCOL);
       }
       else if(getTracker(b,i,j)==-1){
-	printf("X  ");
+	printf(RED BOLD"X  "RSTCOL);
       }
       }
     }
@@ -382,7 +382,7 @@ void play(board *b, int maxshots) {
 
  while (b->unhit > 0 && remain > 0 && (remain >= b->unhit)) {
   printBoard(b);
-  printf("You have %d shots remaining\n",remain);
+  printf("\nYou have %d shots remaining\n",remain);
   readTargets(b,&row,&col);
   if (get(b,row,col) == 0) {
     printf("Miss!\n");
