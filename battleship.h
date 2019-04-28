@@ -26,6 +26,6 @@ void arrangeCruiser(board *b);
 //Aranges the submarines
 void arrangeSubmarine(board *b);
 
-int readTargets(board*b, int * row, int * col);
+int readTargets(board*b, int * row, char * col);
 #endif
 

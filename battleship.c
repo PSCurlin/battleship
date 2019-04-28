@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "battleship.h"
 
@@ -80,10 +81,10 @@ void printBoard(board*b) {
 	printf(".  ");
       }
       else if(getTracker(b,i,j)==1){
-	printf("O  ");
+	printf(BLU BOLD"O  ");
       }
       else if(getTracker(b,i,j)==-1){
-	printf("X  ");
+	printf(RED BOLD"X  ");
       }
       }
     }
@@ -437,8 +438,7 @@ void arrangeSubmarine(board *b){
   return b;
 }
 
-
-int readTargets(board * b, int * targetRow, int * targetCol){
+int readTargets(board * b, int * targetRow, char * targetCol){
   char cell[3];
   int row;
   char col;
@@ -446,11 +446,17 @@ int readTargets(board * b, int * targetRow, int * targetCol){
   int size = b->size;
 
   while(1){
-    fgets(cell,3,stdin);
-
-    if(sscanf("%d",&targetRow) != 1) {
-      printf(YEL BOLD "Error! You must input the number of rows followed by the letter column.); 
+    printf("Enter the cell number to hit:");
+    if(fgets(cell, sizeof(cell),stdin) {
+	ret = sscanf(cell,"%d%c",&row,&col);
+	if (ret !=2 || col < 97 || col > 122) {
+	  printf("Enter the cell as a number (row followed by a lowercase letter (col).\n\n");
+	  continue;
+	}
+	
+      printf(YEL BOLD "Error! You must input the number of rows followed by the letter column.");
     }
+    
   }
 
 }
