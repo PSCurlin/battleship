@@ -3,15 +3,15 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 477c8a82555bddcde513f26f3667a1b0dc1ed38e
 #include "battleship.h"
 
 //Associates the word for each color with its approprate ASCII color equivalent
 #define RED   "\x1B[31m"
-#define GRN   "\x1B[92m"
 #define BLU   "\x1B[94m"
-#define MAG   "\x1B[35m"
-#define CYN   "\x1B[36m"
 #define YEL   "\x1B[93m"
 #define BOLD  "\x1B[1m"
 #define RSTCOL "\x1B[0m"
@@ -28,18 +28,20 @@ struct _board{
   int submarine;
 };
 
-
-
-//Prints a usage if a user enters an invalid input a usage message appears
 void printUsage(){
   printf(YEL BOLD "Error!"RSTCOL" Invalid input. You must input in the following format:\n");
   printf(YEL"Size of board:"RSTCOL" integer between 5 and 20\n");
   printf(YEL"Max Shots:"RSTCOL" Integer between 12 and n^2 - 1 (where n is the size of the board)\n");
 }
 
- board * createBoard(int size) {
-   int i; board * b;
-   if(size <= 0) return NULL;
+void mainScreen(){
+  printf(RED"\n~~~~~~~~~~~~~~~~~~~~~\n"RSTCOL);
+  printf(BOLD YEL "WELCOME TO BATTLESHIP"RSTCOL);
+  printf(RED "\n~~~~~~~~~~~~~~~~~~~~~\n"RSTCOL);
+}
+board * createBoard(int size) {
+  int i; board * b;
+  if(size <= 0) return NULL;
    b = (board *) malloc(sizeof(board));
    if(!b) return NULL;
    b->size = size;
@@ -57,8 +59,8 @@ void printUsage(){
      b->data[i] = 0;
      b->tracker[i] = 0;
    }
-   return b;
- }
+  return b;
+}
 
 int getTracker(board*b, int i, int j) {
    return b->tracker[(j-1) * b->size + i];
@@ -67,6 +69,11 @@ int getTracker(board*b, int i, int j) {
 int get(board *b, int row, int col){
   return b->data[(col-1)*b->size+row];
 }
+
+void setTracker(board * b, int row, int col, double val) {
+  b->tracker[(col-1) * b->size + row] = val;
+}
+
 void set(board * b, int row, int col, double val) {
   b->data[(col-1) * b->size + row] = val;
 }
@@ -81,10 +88,17 @@ void printBoard(board*b) {
 	printf(".  ");
       }
       else if(getTracker(b,i,j)==1){
+<<<<<<< HEAD
 	printf(BLU BOLD"O  ");
       }
       else if(getTracker(b,i,j)==-1){
 	printf(RED BOLD"X  ");
+=======
+	printf(BLU BOLD"O  "RSTCOL);
+      }
+      else if(getTracker(b,i,j)==-1){
+	printf(RED BOLD"X  "RSTCOL);
+>>>>>>> 477c8a82555bddcde513f26f3667a1b0dc1ed38e
       }
       }
     }
@@ -102,350 +116,238 @@ void revealBoard(board*b){
   printf("\n\n");
 }
 
-// Parses the arguments put into the input by the user
-// argc is the argument counter, argv the argument vector
-// size the size of the board and maxshots the maximum number of shots (both of which are stored for setting up the game)
-int parseArgs(int argc, char ** argv,int *size, int *maxshots)
-{
-   //Checks if there are too few inputs or too many, prints the usage if this is the case
+int parseArgs(int argc, char ** argv,int *size, int *maxshots) {
   if (argc < 2 || argc > 3){
 	printUsage();
 	return -1;
       }
-  // Case for when there are two arguments
   else if (argc == 2){
-    // Checks if the input is malformed, or if the maxshots is out of bounds from the range of number of shots defined by the size of the board
-    // If it is, it prints the usage
     if(sscanf(argv[1],"%d",maxshots) != 1 || *maxshots<12||*maxshots>((*size)*(*size))-1){
       printUsage();
       return -1;
     }
   }
-  // Case for when there are three arguments
   else if(argc == 3){
-    // Checks if the input is malformed, or if the maxshots is out of bounds from the range of number of shots defined by the size of the board
-    // If it is, it prints the usage
     if ( sscanf(argv[2],"%d",maxshots) != 1 || *maxshots<12||*maxshots>((*size)*(*size)-1)){
       printUsage();
       return -1;
     }
-    // Checks if the input is malformed, or if the szie is out of bounds from the predefined board size range (5 to 20)
-    // If it is, it prints the usage
     if(sscanf(argv[1],"%d",size) != 1 || *size<5 || *size > 20) {
 	    printUsage();
 	    return -1;
       }
   }
-  //Returns 0 when successfull
   return 0;
 }
 
-
-
- void deleteBoard(board*b)
- {
-   if(b) {
-     free(b->data);
-     free(b->tracker);
-     free(b);
-   }
- }
+void deleteBoard(board*b) {
+ if(b) {
+   free(b->data);
+   free(b->tracker);
+   free(b);
+  }
+}
 
 void arrangeCarrier(board *b){
-   
   int dir,randrow,randcol;
-
   while(1){
-
-  dir = rand() % 4;  //random direction 0 = upwards, 1 = downards, 2 = rightward, 3 = leftward
-
+  dir = rand() % 4; 
   if(dir == 0){ 
-    //generate a random cell, excluding the first three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % (b->size - 4 + 1) + 4;   //from 4 to n
-    randcol = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
+    randrow = rand() % (b->size - 4 + 1) + 4;
+    randcol = rand() % (b->size - 1 + 1) + 1;
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow-1,randcol) !=0 || get(b,randrow-2,randcol) !=0 || get(b,randrow-3,randcol) !=0 ) continue;
-
-    //finally set the cells to 4 (since we are arranging a carrier.)
     set(b,randrow,randcol,1);
     set(b,randrow-1,randcol,1);
     set(b,randrow-2,randcol,1);
     set(b,randrow-3,randcol,1);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
-    
+    break; 
   }
-  else if(dir == 1){  //downward
-    //generate a random cell, excluding the last three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % ((b->size - 3) - 1 + 1) + 1;   //from 1 to n - 3
-    randcol = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
+  else if(dir == 1){
+    randrow = rand() % ((b->size - 3) - 1 + 1) + 1; 
+    randcol = rand() % (b->size - 1 + 1) + 1;  
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow+1,randcol) !=0 || get(b,randrow+2,randcol) !=0 || get(b,randrow+3,randcol) !=0 ) continue;
-
-    //finally set the cells to 1 (since we are arranging a carrier.)
     set(b,randrow,randcol,1);
     set(b,randrow+1,randcol,1);
     set(b,randrow+2,randcol,1);
     set(b,randrow+3,randcol,1);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
+    break; 
   }
-   else if(dir == 2){  //rightward
-    //generate a random cell, excluding the last three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-    randcol = rand() % (b->size - 4 + 1) + 4;   //from 4 to n
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
+   else if(dir == 2){  
+    randrow = rand() % (b->size - 1 + 1) + 1;  
+    randcol = rand() % (b->size - 4 + 1) + 4;  
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow,randcol-1) !=0 || get(b,randrow,randcol-2) !=0 || get(b,randrow,randcol-3) !=0 ) continue;
-
-    //finally set the cells to 1 (since we are arranging a carrier.)
     set(b,randrow,randcol,1);
     set(b,randrow,randcol-1,1);
     set(b,randrow,randcol-2,1);
     set(b,randrow,randcol-3,1);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
+    break; 
   }
-   else if(dir == 3){  //leftward
-    //generate a random cell, excluding the last three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-    randcol = rand() % ((b->size-3) - 1 + 1) + 1;   //from 1 to n - 3
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
+   else if(dir == 3){ 
+    randrow = rand() % (b->size - 1 + 1) + 1;  
+    randcol = rand() % ((b->size-3) - 1 + 1) + 1;
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow,randcol+1) !=0 || get(b,randrow,randcol+2) !=0 || get(b,randrow,randcol+3) !=0 ) continue;
-
-    //finally set the cells to 1 (since we are arranging a carrier.)
     set(b,randrow,randcol,1);
     set(b,randrow,randcol+1,1);
     set(b,randrow,randcol+2,1);
     set(b,randrow,randcol+3,1);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
-  }
-  
+    break; 
+    }
   }
 }
 
 void arrangeBattleship(board *b){
-   int dir,randrow,randcol;
-
+  int dir,randrow,randcol;
   while(1){
-
-  dir = rand() % 4;  //random direction 0 = upwards, 1 = downards, 2 = rightward, 3 = leftward
-
+  dir = rand() % 4;  
   if(dir == 0){ 
-    //generate a random cell, excluding the first three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % (b->size - 3 + 1) + 3;   //from 3 to n
-    randcol = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
+    randrow = rand() % (b->size - 3 + 1) + 3; 
+    randcol = rand() % (b->size - 1 + 1) + 1;
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow-1,randcol) !=0 || get(b,randrow-2,randcol) !=0) continue;
-
-    //finally set the cells to 2 (since we are arranging a battleship.)
     set(b,randrow,randcol,2);
     set(b,randrow-1,randcol,2);
     set(b,randrow-2,randcol,2);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
-    
+    break; 
   }
-  else if(dir == 1){  //downward
-    //generate a random cell, excluding the last three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % ((b->size - 2) - 1 + 1) + 1;   //from 1 to n - 2
-    randcol = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
+  else if(dir == 1){ 
+    randrow = rand() % ((b->size - 2) - 1 + 1) + 1;  
+    randcol = rand() % (b->size - 1 + 1) + 1;  
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow+1,randcol) !=0 || get(b,randrow+2,randcol) !=0) continue;
-
-    //finally set the cells to 2 (since we are arranging a battleship.)
     set(b,randrow,randcol,2);
     set(b,randrow+1,randcol,2);
     set(b,randrow+2,randcol,2);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
+    break; 
   }
-   else if(dir == 2){  //rightward
-    //generate a random cell, excluding the last three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-    randcol = rand() % (b->size - 3 + 1) + 3;   //from 3 to n
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
-    if (get(b,randrow,randcol) !=0 ||  get(b,randrow,randcol-1) !=0 || get(b,randrow,randcol-2) !=0) continue;
-
-    //finally set the cells to 2 (since we are arranging a battleship.)
-    set(b,randrow,randcol,2);
-    set(b,randrow,randcol-1,2);
-    set(b,randrow,randcol-2,2);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
+   else if(dir == 2){  
+     randrow = rand() % (b->size - 1 + 1) + 1;   
+     randcol = rand() % (b->size - 3 + 1) + 3;   
+     if (get(b,randrow,randcol) !=0 ||  get(b,randrow,randcol-1) !=0 || get(b,randrow,randcol-2) !=0) continue;
+     set(b,randrow,randcol,2);
+     set(b,randrow,randcol-1,2);
+     set(b,randrow,randcol-2,2);
+     break; 
   }
-   else if(dir == 3){  //leftward
-    //generate a random cell, excluding the last three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-    randcol = rand() % ((b->size-2) - 1 + 1) + 1;   //from 1 to n - 2
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
-    if (get(b,randrow,randcol) !=0 ||  get(b,randrow,randcol+1) !=0 || get(b,randrow,randcol+2) !=0) continue;
-
-    //finally set the cells to 2 (since we are arranging a battleship.)
-    set(b,randrow,randcol,2);
-    set(b,randrow,randcol+1,2);
-    set(b,randrow,randcol+2,2);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
-  }
-  
+   else if(dir == 3){  
+     randrow = rand() % (b->size - 1 + 1) + 1;  
+     randcol = rand() % ((b->size-2) - 1 + 1) + 1;   
+     if (get(b,randrow,randcol) !=0 ||  get(b,randrow,randcol+1) !=0 || get(b,randrow,randcol+2) !=0) continue;
+     set(b,randrow,randcol,2);
+     set(b,randrow,randcol+1,2);
+     set(b,randrow,randcol+2,2);
+     break;
+    }
   }
 }
 
 void arrangeCruiser(board *b){
-   int dir,randrow,randcol;
-
+  int dir,randrow,randcol;
   while(1){
-
-  dir = rand() % 4;  //random direction 0 = upwards, 1 = downards, 2 = rightward, 3 = leftward
-
+  dir = rand() % 4; 
   if(dir == 0){ 
-    //generate a random cell, excluding the first three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % (b->size - 3 + 1) + 3;   //from 3 to n
-    randcol = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
-    if (get(b,randrow,randcol) !=0 ||  get(b,randrow-1,randcol) !=0 || get(b,randrow-2,randcol) !=0) continue;
-
-    //finally set the cells to 3 (since we are arranging a cruiser.)
-    set(b,randrow,randcol,3);
-    set(b,randrow-1,randcol,3);
-    set(b,randrow-2,randcol,3);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
-    
+   randrow = rand() % (b->size - 3 + 1) + 3;   
+   randcol = rand() % (b->size - 1 + 1) + 1; 
+   if (get(b,randrow,randcol) !=0 ||  get(b,randrow-1,randcol) !=0 || get(b,randrow-2,randcol) !=0) continue;
+   set(b,randrow,randcol,3);
+   set(b,randrow-1,randcol,3);
+   set(b,randrow-2,randcol,3);
+   break;  
   }
-  else if(dir == 1){  //downward
-    //generate a random cell, excluding the last three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % ((b->size - 2) - 1 + 1) + 1;   //from 1 to n - 2
-    randcol = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
-    if (get(b,randrow,randcol) !=0 ||  get(b,randrow+1,randcol) !=0 || get(b,randrow+2,randcol) !=0) continue;
-
-    //finally set the cells to 3 (since we are arranging a cruiser.)
-    set(b,randrow,randcol,3);
-    set(b,randrow+1,randcol,3);
-    set(b,randrow+2,randcol,3);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
+  else if(dir == 1){ 
+   randrow = rand() % ((b->size - 2) - 1 + 1) + 1;  
+   randcol = rand() % (b->size - 1 + 1) + 1;   
+   if (get(b,randrow,randcol) !=0 ||  get(b,randrow+1,randcol) !=0 || get(b,randrow+2,randcol) !=0) continue;
+   set(b,randrow,randcol,3);
+   set(b,randrow+1,randcol,3);
+   set(b,randrow+2,randcol,3);
+   break;  
   }
-   else if(dir == 2){  //rightward
-    //generate a random cell, excluding the last three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-    randcol = rand() % (b->size - 3 + 1) + 3;   //from 3 to n
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
+   else if(dir == 2){  
+    randrow = rand() % (b->size - 1 + 1) + 1;  
+    randcol = rand() % (b->size - 3 + 1) + 3;   
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow,randcol-1) !=0 || get(b,randrow,randcol-2) !=0) continue;
-
-    //finally set the cells to 3 (since we are arranging a cruiser.)
     set(b,randrow,randcol,3);
     set(b,randrow,randcol-1,3);
     set(b,randrow,randcol-2,3);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
+    break; 
   }
-   else if(dir == 3){  //leftward
-    //generate a random cell, excluding the last three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-    randcol = rand() % ((b->size-2) - 1 + 1) + 1;   //from 1 to n - 2
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
+   else if(dir == 3){ 
+    randrow = rand() % (b->size - 1 + 1) + 1;  
+    randcol = rand() % ((b->size-2) - 1 + 1) + 1;  
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow,randcol+1) !=0 || get(b,randrow,randcol+2) !=0) continue;
-
-    //finally set the cells to 3 (since we are arranging a cruiser.)
     set(b,randrow,randcol,3);
     set(b,randrow,randcol+1,3);
     set(b,randrow,randcol+2,3);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
-  }
-  
+    break; 
+    }
   }
 }
 
 void arrangeSubmarine(board *b){
-   int dir,randrow,randcol;
-
+  int dir,randrow,randcol;
   while(1){
-
-  dir = rand() % 4;  //random direction 0 = upwards, 1 = downards, 2 = rightward, 3 = leftward
+  dir = rand() % 4; 
 
   if(dir == 0){ 
-    //generate a random cell, excluding the first three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % (b->size - 2 + 1) + 2;   //from 2 to n
-    randcol = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
+    randrow = rand() % (b->size - 2 + 1) + 2;
+    randcol = rand() % (b->size - 1 + 1) + 1;   
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow-1,randcol) !=0) continue;
-
-    //finally set the cells to 4 (since we are arranging a submarine.)
     set(b,randrow,randcol,4);
     set(b,randrow-1,randcol,4);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!    
+    break; 
   }
-  else if(dir == 1){  //downward
-    //generate a random cell, excluding the last three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % ((b->size - 1) - 1 + 1) + 1;   //from 1 to n - 1
-    randcol = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
+  else if(dir == 1){
+    randrow = rand() % ((b->size - 1) - 1 + 1) + 1; 
+    randcol = rand() % (b->size - 1 + 1) + 1;  
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow+1,randcol) !=0) continue;
-
-    //finally set the cells to 4 (since we are arranging a submarine.)
     set(b,randrow,randcol,4);
     set(b,randrow+1,randcol,4);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
+    break;  
   }
-   else if(dir == 2){  //rightward
-    //generate a random cell, excluding the last three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-    randcol = rand() % (b->size - 2 + 1) + 2;   //from 2 to n
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
+   else if(dir == 2){ 
+    randrow = rand() % (b->size - 1 + 1) + 1;  
+    randcol = rand() % (b->size - 2 + 1) + 2;   
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow,randcol-1) !=0) continue;
-
-    //finally set the cells to 4 (since we are arranging a submarine.)
     set(b,randrow,randcol,4);
     set(b,randrow,randcol-1,4);;
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
+    break;  
   }
-   else if(dir == 3){  //leftward
-    //generate a random cell, excluding the last three random rows, otherwise the ship may go out of the board!
-    randrow = rand() % (b->size - 1 + 1) + 1;   //from 1 to n
-    randcol = rand() % ((b->size-1) - 1 + 1) + 1;   //from 1 to n - 1
-
-    //ensure that the ship does not overlap with other ships, if it does then continue to the top of the while loop again
+   else if(dir == 3){ 
+    randrow = rand() % (b->size - 1 + 1) + 1;
+    randcol = rand() % ((b->size-1) - 1 + 1) + 1;
     if (get(b,randrow,randcol) !=0 ||  get(b,randrow,randcol+1) !=0) continue;
-
-    //finally set the cells to 4 (since we are arranging a submarine.)
     set(b,randrow,randcol,4);
     set(b,randrow,randcol+1,4);
-    break;  //very important, otherwise you get stuck in an infinite loop!!!!!
-  }
-  
+    break; 
+    }
   }
 }
- board * randomFleetArrangement (board * b){
 
-  arrangeCarrier(b);
-  arrangeBattleship(b);
-  arrangeCruiser(b);
-  arrangeSubmarine(b);
-
-  b->unhit = 12;
-  b->carrier = 4;
-  b->battleship = 3;
-  b->cruiser = 3;
-  b->submarine = 2;
-
-  return b;
+void randomFleetArrangement (board * b){
+ arrangeCarrier(b);
+ arrangeBattleship(b);
+ arrangeCruiser(b);
+ arrangeSubmarine(b);
+ b->unhit = 12;
+ b->carrier = 4;
+ b->battleship = 3;
+ b->cruiser = 3;
+ b->submarine = 2;
 }
 
+<<<<<<< HEAD
 int readTargets(board * b, int * targetRow, char * targetCol){
   char cell[3];
+=======
+void readTargets(board * b, int * targetRow, int * targetCol){
+  char cell[4];
+>>>>>>> 477c8a82555bddcde513f26f3667a1b0dc1ed38e
   int row;
   char col;
   int ret;
   int size = b->size;
+  char *p;
 
   while(1){
+<<<<<<< HEAD
     printf("Enter the cell number to hit:");
     if(fgets(cell, sizeof(cell),stdin) {
 	ret = sscanf(cell,"%d%c",&row,&col);
@@ -457,7 +359,116 @@ int readTargets(board * b, int * targetRow, char * targetCol){
       printf(YEL BOLD "Error! You must input the number of rows followed by the letter column.");
     }
     
-  }
+=======
+    printf("Enter target cell: ");
+    if(fgets(cell,sizeof(cell),stdin) != NULL) {
 
+      if ((p=strchr(cell,'\n'))) {
+	  *p=0;
+	}
+	else {
+	scanf("%*[^\n]");
+	scanf("%*c");
+	}
+      ret = sscanf(cell,"%d%c",&row,&col);
+      if (ret != 2 || col<97 || col>122){
+      printf(YEL BOLD "Error! "RSTCOL"You must input the number of rows followed by the letter column.\n"); 
+      continue;
+      }
+      if (row<1 || row > size) {
+      printf(YEL BOLD "Error! "RSTCOL" You must input a positive number of rows followed by the letter column.\n"RSTCOL); 
+      continue;
+      }
+      if (col-96 > size) {
+      printf(YEL BOLD "Error! "RSTCOL" You must input a number within the range of the board size\n"RSTCOL); 
+      continue; 
+      }
+      if (getTracker(b,row,col-96) != 0) {
+        printf("You already shot this target!\n");
+        continue;
+      }
+      *targetRow = row;
+      *targetCol = col - 96;
+      break;
+    } 
+    else {
+      printf(YEL BOLD "Error! "RSTCOL"You must input the number of rows followed by the letter column.\n"); 
+      continue;
+    }      
+>>>>>>> 477c8a82555bddcde513f26f3667a1b0dc1ed38e
+  }
+}
+
+void play(board *b, int maxshots) {
+ int row, col;
+ int remain = maxshots;
+ int a1 = 0;
+ int a2 = 0;
+ int a3 = 0;
+ int a4 = 0;
+
+ while (b->unhit > 0 && remain > 0 && (remain >= b->unhit)) {
+  printBoard(b);
+  printf("\nYou have %d shots remaining\n",remain);
+  readTargets(b,&row,&col);
+  if (get(b,row,col) == 0) {
+    printf(RED BOLD"\nMiss!\n"RSTCOL);
+    setTracker(b,row,col,-1);
+    remain--;
+  }
+   if (get(b,row,col) == 1) {
+    printf(BLU BOLD"\nHit!\n"RSTCOL);
+    setTracker(b,row,col,1);
+    b->carrier--;
+    b->unhit--;
+    remain--;
+   }
+  if (get(b,row,col) == 2) {
+    printf(YEL"\nHit!\n"RSTCOL);
+    setTracker(b,row,col,1);
+    b->battleship--;
+    b->unhit--;
+    remain--;
+  }
+  if (get(b,row,col) == 3) {
+    printf(YEL"\nHit!\n"RSTCOL);
+    setTracker(b,row,col,1);
+    b->cruiser--;
+    b->unhit--;
+    remain--;
+  }
+  if (get(b,row,col) == 4) {
+    printf(YEL"\nHit!\n"RSTCOL);
+    setTracker(b,row,col,1);
+    b->submarine--;
+    b->unhit--;
+    remain--;
+   }
+  if (b->carrier == 0 && a1 == 0 ) {
+    printf(RED "\nYou sunk my "BOLD" carrier"RSTCOL RED"!\n" RSTCOL);
+    a1 = 1;
+  }
+   if (b->battleship == 0 && a2 == 0 ) {
+    printf(RED "\nYou sunk my "BOLD" battleship"RSTCOL RED"!\n" RSTCOL);
+    a2 = 1;
+  }
+  if (b->cruiser == 0 && a3 == 0 ) {
+    printf(RED "\nYou sunk my "BOLD" cruiser"RSTCOL RED"!\n" RSTCOL);
+    a3 = 1;
+  }
+  if (b->submarine == 0 && a4 == 0 ) {
+    printf(RED "\nYou sunk my "BOLD" submarine"RSTCOL RED"!\n" RSTCOL);
+    a4 = 1;
+  }
+ }
+ if (remain == 0 && b->unhit > 0) {
+   printf(BLU BOLD"\nYOU LOSE - GAME OVER - YOU RAN OUT OF SHOTS! \n"RSTCOL); 
+ }
+ if (remain < b->unhit && b->unhit>0 && remain>0) {
+   printf(BLU BOLD"\nYOU LOSE - GAME OVER - NOT ENOUGH SHOTS REMAINING! \n"RSTCOL);
+ }
+ if (b->unhit == 0 && remain > 0) {
+   printf(RED BOLD"\nYOU WIN - GAME OVER - CONGRATULAIONS!\n"RSTCOL);
+ }
 }
 
