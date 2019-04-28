@@ -5,7 +5,7 @@
 #include <time.h>
 
 int main(int argc, char **argv){
-  mnscrn();
+  mainscrn();
   srand(time(0));
   int size=8, maxshots, err;
   err = parseArgs(argc,argv,&size,&maxshots);
@@ -21,12 +21,8 @@ int main(int argc, char **argv){
 
   //Arrange Fleet
   randomFleetArrangement(b);
-
   printBoard(b);
-  revealBoard(b);
-  int * row;
-  int * col;
-  readTargets(b,row, col);
-  
+
+  play(b,maxshots);
   }
 }

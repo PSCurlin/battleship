@@ -422,7 +422,7 @@ void arrangeSubmarine(board *b){
   }
 }
 
-board * randomFleetArrangement (board * b){
+void randomFleetArrangement (board * b){
  arrangeCarrier(b);
  arrangeBattleship(b);
  arrangeCruiser(b);
@@ -434,7 +434,6 @@ board * randomFleetArrangement (board * b){
  b->cruiser = 3;
  b->submarine = 2;
 
- return b;
 }
 
 int readTargets(board * b, int * targetRow, int * targetCol){

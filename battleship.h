@@ -1,6 +1,8 @@
 #ifndef BATTLESHIP_H_
 #define BATTLESHIP_H_
 
+//Prints the mainscreen of the game
+void mnscrn();
 //Prints the usage if the user inputs something invalid
 void printUsage();
 //Main screen of the game
@@ -16,8 +18,10 @@ board *  createBoard(int size);
 void deleteBoard();
 //Prints the board
 void printBoard(board*b);
-//Tracks if the cell has been previously hit
+//Gets the value of the cell
 int getTracker(board*b, int i, int j);
+//Sets the value of a cell
+void setTracker(board * b, int row, int col, double val);
 //Reveals the board
 void revealBoard(board *b);
 //Gets element from the board
@@ -33,12 +37,10 @@ void arrangeCruiser(board *b);
 //Aranges the submarines
 void arrangeSubmarine(board *b);
 //Reads the inputted target by the user
+void randomFleetArrangement (board * b);
 int readTargets(board*b, int * row, int * col);
-//Declares that you lost and quits the game
-int lose();
-//Declares that you won and quits the game
-int win();
-//Counts the number of hits until the max number of shots
+//Main function that counts if your shots and declares your win or loss
+int play(board *b, int maxshots);
 
 #endif
 
