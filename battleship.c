@@ -385,33 +385,33 @@ void play(board *b, int maxshots) {
   printf("\nYou have %d shots remaining\n",remain);
   readTargets(b,&row,&col);
   if (get(b,row,col) == 0) {
-    printf(RED BOLD"Miss!\n"RSTCOL);
+    printf(RED BOLD"\nMiss!\n"RSTCOL);
     setTracker(b,row,col,-1);
     remain--;
   }
    if (get(b,row,col) == 1) {
-    printf(BLU BOLD"Hit!\n"RSTCOL);
+    printf(BLU BOLD"\nHit!\n"RSTCOL);
     setTracker(b,row,col,1);
     b->carrier--;
     b->unhit--;
     remain--;
    }
   if (get(b,row,col) == 2) {
-    printf(YEL"Hit!\n"RSTCOL);
+    printf(YEL"\nHit!\n"RSTCOL);
     setTracker(b,row,col,1);
     b->battleship--;
     b->unhit--;
     remain--;
   }
   if (get(b,row,col) == 3) {
-    printf(YEL"Hit!\n"RSTCOL);
+    printf(YEL"\nHit!\n"RSTCOL);
     setTracker(b,row,col,1);
     b->cruiser--;
     b->unhit--;
     remain--;
   }
   if (get(b,row,col) == 4) {
-    printf(YEL"Hit!\n"RSTCOL);
+    printf(YEL"\nHit!\n"RSTCOL);
     setTracker(b,row,col,1);
     b->submarine--;
     b->unhit--;
