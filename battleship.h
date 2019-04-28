@@ -4,7 +4,7 @@
 //Prints the usage if the user inputs something invalid
 void printUsage();
 //Main screen of the game
-int mainscrn();
+void mainScreen();
 //Creates a delay if needed in seconds
 void delay(int seconds);
 // Parses the arguments inputted by the user
