@@ -7,10 +7,7 @@
 
 //Associates the word for each color with its approprate ASCII color equivalent
 #define RED   "\x1B[31m"
-#define GRN   "\x1B[92m"
 #define BLU   "\x1B[94m"
-#define MAG   "\x1B[35m"
-#define CYN   "\x1B[36m"
 #define YEL   "\x1B[93m"
 #define BOLD  "\x1B[1m"
 #define RSTCOL "\x1B[0m"
