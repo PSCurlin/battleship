@@ -390,7 +390,7 @@ void play(board *b, int maxshots) {
     remain--;
   }
    if (get(b,row,col) == 1) {
-    printf(BLUE BOLD"Hit!\n"RSTCOL);
+    printf(BLU BOLD"Hit!\n"RSTCOL);
     setTracker(b,row,col,1);
     b->carrier--;
     b->unhit--;
