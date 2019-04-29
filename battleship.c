@@ -442,6 +442,7 @@ void play(board *b, int maxshots) {
  }
  if (b->unhit == 0 && remain > 0) {
    printf(RED BOLD"\nYOU WIN - GAME OVER - CONGRATULAIONS!\n"RSTCOL);
+
  }
 }
 

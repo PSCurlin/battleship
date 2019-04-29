@@ -15,6 +15,6 @@ int main(int argc, char **argv){
   b = createBoard(size);
   randomFleetArrangement(b);
   play(b,maxshots);
+  deleteBoard(b);
   }
-  deleteBoard();
 }
