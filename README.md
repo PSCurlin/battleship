@@ -25,7 +25,7 @@ After running this command, a board of the size specified will be outputted.
 4. To guess the location of a ship, input the guess in the following order, no space in between:
 
 ```
-[row (an integer)][col(a letter)]
+[row (an integer)][col (a character)]
 ```
 
 The game ends when you either run out of shots, have not enough shots left to sink all the ships, or sink all the ships.
